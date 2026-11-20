@@ -1,0 +1,110 @@
+import { Injectable } from '@nestjs/common';
+import { CreateAuthDto } from './dto/create-auth.dto';
+import { UpdateAuthDto } from './dto/update-auth.dto';
+import { RegisterDto } from './dto/register.dto';
+import * as bcrypt from 'bcrypt';
+import { User } from '../user/user.model';
+import { InjectModel } from '@nestjs/sequelize';
+import { JwtService } from '@nestjs/jwt';
+
+import { UserRole } from '../../models/master_data/user_role.model';
+import { Role } from '../../models/master_data/role.model';
+import { Menu } from '../../models/master_data/menu.model';
+import { RoleMenuPermission } from '../../models/master_data/role_menu_permission.model';
+
+@Injectable()
+export class AuthService {
+  constructor(
+    @InjectModel(User)
+    private m_user: typeof User,
+    @InjectModel(UserRole)
+    private m_user_role: typeof UserRole,
+    @InjectModel(Role)
+    private m_role: typeof Role,
+    @InjectModel(Menu)
+    private m_menu: typeof Menu,
+    @InjectModel(RoleMenuPermission)
+    private m_role_menu_permission: typeof RoleMenuPermission,
+    private jwtService: JwtService,
+  ) { }
+
+  private async hashPassword(password) {
+    const hash = await bcrypt.hash(password, 10);
+    // console.log(hash);
+    return hash;
+  }
+
+  public async create(createAuthDto: CreateAuthDto) {
+    return 'This action adds a new auth';
+  }
+
+  public async findAll() {
+    return `This action returns all auth`;
+  }
+
+  public async findOne(id: number) {
+    return `This action returns a #${id} auth`;
+  }
+
+  public async update(id: number, updateAuthDto: UpdateAuthDto) {
+    return `This action updates a #${id} auth`;
+  }
+
+  public async remove(id: number) {
+    return `This action removes a #${id} auth`;
+  }
+
+  public async register(dto: RegisterDto) {
+    try {
+      console.log(dto);
+      const pass = await this.hashPassword(dto.password);
+      await this.m_user.create({ ...dto, password: pass } as any);
+      return 'This action registers a new user';
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  }
+
+  public async login(dto: any) {
+    try {
+      const user = await this.m_user.findOne({ where: { email: dto.email } });
+      if (!user) {
+        throw new Error('User not found');
+      }
+      const isPasswordValid = await bcrypt.compare(dto.password, user.password);
+      if (!isPasswordValid) {
+        throw new Error('Invalid password');
+      }
+      //get role and permissions of the user
+      const userData = user.toJSON();
+      const userRoles = await this.m_user_role.findAll({ where: { user_id: user.id } });
+      const role_ids = userRoles.map((userRole) => userRole.role_id);
+      const roles = await this.m_role.findAll({ where: { id: role_ids } });
+      const roleMenuPermissions = await this.m_role_menu_permission.findAll({ where: { role_id: role_ids } });
+      const menu_ids = roleMenuPermissions.map((roleMenuPermission) => roleMenuPermission.menu_id);
+      const menuAccess = await this.m_menu.findAll({ where: { id: menu_ids } });
+      // console.log({ roles, menuAccess });
+
+      // JWT payload
+      const payload = {
+        sub: user.id,
+        email: user.email,
+        roles: role_ids,
+      };
+
+      return {
+        ...userData,
+        roles,
+        menuAccess,
+        access_token: this.jwtService.sign(payload),
+      };
+
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  }
+
+}
+
