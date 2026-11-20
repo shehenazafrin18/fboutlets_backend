@@ -18,7 +18,26 @@ import { Role } from './models/master_data/role.model';
 import { Menu } from './models/master_data/menu.model';
 import { RoleMenuPermission } from './models/master_data/role_menu_permission.model';
 import { MenuModule } from './modules/menu/menu.module';
-
+import { MenuCategoriesModule } from './modules/menu_categories/menu_categories.module';
+import { OutletMenuModule } from './modules/outlet_menu/outlet_menu.module';
+import { CompanyModule } from './modules/company/company.module';
+import { OutletModule } from './modules/outlet/outlet.module';
+import { InventoriesModule } from './modules/inventories/inventories.module';
+import { InventoryTransactionsModule } from './modules/inventory_transactions/inventory_transactions.module';
+import { SalesModule } from './modules/sales/sales.module';
+import { SalesItemsModule } from './modules/sales_items/sales_items.module';
+import { OutletReceiptCountersModule } from './modules/outlet_receipt_counters/outlet_receipt_counters.module';
+import { Company } from './models/company.model';
+import { Outlet } from './models/outlet.model';
+import { MenuCategory } from './models/menu_categories.model';
+import { MenuItem } from './models/menu_items.model';
+import { OutletMenu } from './models/outlet_menu.model';
+import { InventoryItem } from './models/inventory_items.model';
+import { InventoryTransaction } from './models/inventory_transactions.model';
+import { Inventory } from './models/inventories.model';
+import { Sale } from './models/sales.model';
+import { SaleItem } from './models/sales_items.model';
+import { OutletReceiptCounter } from './models/outlet_receipt_counters.model';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -50,7 +69,18 @@ import { MenuModule } from './modules/menu/menu.module';
         UserRole,
         Role,
         Menu,
-        RoleMenuPermission
+        RoleMenuPermission,
+        Company,
+        Outlet,
+        MenuCategory,
+        MenuItem,
+        OutletMenu,
+        InventoryItem,
+        InventoryTransaction,
+        Inventory,
+        Sale,
+        SaleItem,
+        OutletReceiptCounter
       ],
       // logging: console.log
     }),
@@ -61,6 +91,15 @@ import { MenuModule } from './modules/menu/menu.module';
     MenuModule,
     RoleMenuPermission,
     JwtModule,
+    MenuCategoriesModule,
+    OutletMenuModule,
+    CompanyModule,
+    OutletModule,
+    InventoriesModule,
+    InventoryTransactionsModule,
+    SalesModule,
+    SalesItemsModule,
+    OutletReceiptCountersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

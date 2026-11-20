@@ -1,29 +1,3 @@
-// import { Table, Model, Column, DataType, AutoIncrement, PrimaryKey, BelongsTo } from 'sequelize-typescript';
-// import { Role } from './role.model';
-
-// @Table({
-//   tableName: 'role_menu_permissions',
-//   timestamps: true,
-//   paranoid: true,
-// })
-// export class RoleMenuPermission extends Model<RoleMenuPermission> {
-//   @PrimaryKey
-//   @AutoIncrement
-//   @Column(DataType.INTEGER)
-//   declare id: number;
-
-//   @Column({ type: DataType.INTEGER, allowNull: false })
-//   declare role_id: number;
-
-//   @Column({ type: DataType.INTEGER, allowNull: false })
-//   declare menu_id: number;
-
-//   @BelongsTo(() => Role, 'role_id')
-//   role: Role;
-// }
-
-
-
 import {
   Table,
   Column,

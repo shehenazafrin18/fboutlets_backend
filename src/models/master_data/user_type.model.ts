@@ -6,6 +6,10 @@ import { AutoIncrement, Column, DataType, Default, Model, PrimaryKey, Table } fr
 })
 
 export class UserType extends Model<UserType> {
+    @PrimaryKey
+    @AutoIncrement
+    @Column(DataType.INTEGER)
+    declare id: number;
 
     @Column({ type: DataType.STRING, allowNull: false })
     declare name: string;
