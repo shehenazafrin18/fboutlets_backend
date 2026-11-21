@@ -34,25 +34,7 @@ export class AuthService {
     return hash;
   }
 
-  public async create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
-  }
 
-  public async findAll() {
-    return `This action returns all auth`;
-  }
-
-  public async findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
-
-  public async update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
-  }
-
-  public async remove(id: number) {
-    return `This action removes a #${id} auth`;
-  }
 
   public async register(dto: RegisterDto) {
     try {

@@ -45,7 +45,7 @@ export class OutletMenu extends Model<OutletMenu> {
 
     @AllowNull(false)
     @Column(DataType.DECIMAL(10, 2))
-    declare selling_price: string;
+    declare selling_price: number;
 
     @Default(true)
     @AllowNull(false)

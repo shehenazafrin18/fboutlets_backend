@@ -38,21 +38,21 @@ export class Inventory extends Model<Inventory> {
         type: DataType.INTEGER,
         allowNull: false,
     })
-    company_id: string;
+    company_id: number;
 
     @ForeignKey(() => Outlet)
     @Column({
         type: DataType.INTEGER,
         allowNull: false,
     })
-    outlet_id: string;
+    outlet_id: number;
 
     @ForeignKey(() => InventoryItem)
     @Column({
         type: DataType.INTEGER,
         allowNull: false,
     })
-    inventory_item_id: string;
+    inventory_item_id: number;
 
     @Column({
         type: DataType.DECIMAL(12, 3),
