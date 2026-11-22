@@ -56,5 +56,5 @@ export class Company extends Model<Company> {
     declare created_at: Date;
 
     @UpdatedAt
-    declare updated_at: Date;
+    declare updated_at?: Date;
 }

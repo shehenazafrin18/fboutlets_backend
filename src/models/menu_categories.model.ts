@@ -38,7 +38,7 @@ export class MenuCategory extends Model<MenuCategory> {
     @ForeignKey(() => Company)
     @AllowNull(false)
     @Column(DataType.INTEGER)
-    declare company_id: string;
+    declare company_id: number;
 
     @AllowNull(false)
     @Column(DataType.STRING(100))
@@ -72,5 +72,5 @@ export class MenuCategory extends Model<MenuCategory> {
     declare created_at: Date;
 
     @UpdatedAt
-    declare updated_at: Date;
+    declare updated_at?: Date;
 }

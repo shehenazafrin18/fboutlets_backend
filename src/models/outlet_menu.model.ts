@@ -36,12 +36,12 @@ export class OutletMenu extends Model<OutletMenu> {
     @ForeignKey(() => Outlet)
     @AllowNull(false)
     @Column(DataType.INTEGER)
-    declare outlet_id: string;
+    declare outlet_id: number;
 
     @ForeignKey(() => MenuItem)
     @AllowNull(false)
     @Column(DataType.INTEGER)
-    declare menu_item_id: string;
+    declare menu_item_id: number;
 
     @AllowNull(false)
     @Column(DataType.DECIMAL(10, 2))
@@ -62,5 +62,5 @@ export class OutletMenu extends Model<OutletMenu> {
     declare created_at: Date;
 
     @UpdatedAt
-    declare updated_at: Date;
+    declare updated_at?: Date;
 }

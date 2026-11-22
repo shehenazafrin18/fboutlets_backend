@@ -7,8 +7,10 @@ import {
     Column,
     DataType, PrimaryKey,
     AutoIncrement, AllowNull, Unique, Default,
-    ForeignKey
+    ForeignKey,
+    BelongsTo
 } from 'sequelize-typescript';
+import { Company } from '@/models/company.model';
 
 @Table({
     tableName: 'user',
@@ -66,4 +68,13 @@ export class User extends Model<User> {
     @ForeignKey(() => Upazila)
     @Column({ type: DataType.INTEGER, allowNull: true })
     declare upazila_id: number;
+
+    @ForeignKey(() => Company)
+    @Column({ type: DataType.INTEGER, allowNull: true })
+    declare company_id: number;
+
+    @BelongsTo(() => Company)
+    company: Company;
+
+
 }

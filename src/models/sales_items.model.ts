@@ -37,14 +37,14 @@ export class SaleItem extends Model<SaleItem> {
         type: DataType.INTEGER,
         allowNull: false,
     })
-    sale_id: string;
+    sale_id: number;
 
     @ForeignKey(() => MenuItem)
     @Column({
         type: DataType.INTEGER,
         allowNull: false,
     })
-    menu_item_id: string;
+    menu_item_id: number;
 
     @Column({
         type: DataType.STRING(150),

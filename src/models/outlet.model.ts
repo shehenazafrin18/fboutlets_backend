@@ -63,5 +63,5 @@ export class Outlet extends Model<Outlet> {
     declare created_at: Date;
 
     @UpdatedAt
-    declare updated_at: Date;
+    declare updated_at?: Date;
 }

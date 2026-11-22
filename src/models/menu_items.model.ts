@@ -39,12 +39,12 @@ export class MenuItem extends Model<MenuItem> {
     @ForeignKey(() => Company)
     @AllowNull(false)
     @Column(DataType.INTEGER)
-    declare company_id: string;
+    declare company_id: number;
 
     @ForeignKey(() => MenuCategory)
     @AllowNull(false)
     @Column(DataType.INTEGER)
-    declare category_id: string;
+    declare category_id: number;
 
     @AllowNull(false)
     @Column(DataType.STRING(150))
@@ -64,7 +64,7 @@ export class MenuItem extends Model<MenuItem> {
 
     @AllowNull(false)
     @Column(DataType.DECIMAL(10, 2))
-    declare base_price: number;
+    declare base_price: string;
 
     @Default(true)
     @AllowNull(false)
@@ -81,5 +81,5 @@ export class MenuItem extends Model<MenuItem> {
     declare created_at: Date;
 
     @UpdatedAt
-    declare updated_at: Date;
+    declare updated_at?: Date;
 }

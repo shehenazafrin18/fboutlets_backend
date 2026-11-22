@@ -110,6 +110,12 @@ export class Sale extends Model<Sale> {
     sale_status: SaleStatus;
 
     @Column({
+        type: DataType.ENUM('CASH', 'CARD', 'MOBILE_BANKING'),
+        allowNull: false,
+    })
+    payment_method: string;
+
+    @Column({
         type: DataType.STRING(150),
         allowNull: true,
     })
