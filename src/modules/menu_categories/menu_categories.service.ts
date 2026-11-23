@@ -4,7 +4,7 @@ import { UpdateMenuCategoriesDto } from './dto/update-menu_categories.dto';
 import { MenuCategory } from '@/models/menu_categories.model';
 import { InjectModel } from '@nestjs/sequelize';
 import { Op } from 'sequelize';
-
+import { COMPANY_ID } from '@/common/constants';
 
 @Injectable()
 export class MenuCategoriesService {
@@ -15,7 +15,7 @@ export class MenuCategoriesService {
     public async create(createMenuCategoriesDto: CreateMenuCategoriesDto) {
         const existing = await this.menuCategoryModel.findOne({
             where: {
-                company_id: createMenuCategoriesDto.company_id,
+                company_id: COMPANY_ID,
                 name: createMenuCategoriesDto.name,
             },
         });
@@ -33,7 +33,7 @@ export class MenuCategoriesService {
 
     public async findAll() {
         return this.menuCategoryModel.findAll({
-            order: [['createdAt', 'DESC']],
+            order: [['created_at', 'DESC']],
         });
     }
 
@@ -49,17 +49,17 @@ export class MenuCategoriesService {
 
     public async update(id: number, updateMenuCategoriesDto: UpdateMenuCategoriesDto) {
         const menuCategory = await this.menuCategoryModel.findByPk(id);
-
+        console.log({ updateMenuCategoriesDto })
         if (!menuCategory) {
             throw new NotFoundException('Menu Category not found');
         }
 
         if (
-            updateMenuCategoriesDto.company_id ||
+            // updateMenuCategoriesDto.company_id ||
             updateMenuCategoriesDto.name
         ) {
             const companyId =
-                updateMenuCategoriesDto.company_id ?? menuCategory.company_id;
+                COMPANY_ID ?? menuCategory.company_id;
 
 
 

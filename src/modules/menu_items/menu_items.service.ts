@@ -7,7 +7,7 @@ import { Op } from 'sequelize';
 import { CreateMenuItemsDto } from './dto/create-menu_items.dto';
 import { UpdateMenuItemsDto } from './dto/update-menu_items.dto';
 import { MenuItem } from '@/models/menu_items.model';
-
+import { COMPANY_ID } from '@/common/constants';
 @Injectable()
 export class MenuItemsService {
     constructor(
@@ -18,7 +18,7 @@ export class MenuItemsService {
 
         const existing = await this.menuItemModel.findOne({
             where: {
-                company_id: createMenuItemsDto.company_id,
+                company_id: COMPANY_ID,
                 category_id: createMenuItemsDto.category_id,
                 name: createMenuItemsDto.name,
             },
@@ -59,12 +59,11 @@ export class MenuItemsService {
         }
 
         if (
-            updateMenuItemsDto.company_id ||
+            // updateMenuItemsDto.company_id ||
             updateMenuItemsDto.category_id ||
             updateMenuItemsDto.name
         ) {
-            const companyId =
-                updateMenuItemsDto.company_id ?? menuItem.company_id;
+            const companyId = COMPANY_ID ?? menuItem.company_id;
 
             const categoryId =
                 updateMenuItemsDto.category_id ?? menuItem.category_id;

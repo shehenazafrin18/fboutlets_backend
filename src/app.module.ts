@@ -38,6 +38,9 @@ import { Inventory } from './models/inventories.model';
 import { Sale } from './models/sales.model';
 import { SaleItem } from './models/sales_items.model';
 import { OutletReceiptCounter } from './models/outlet_receipt_counters.model';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from './modules/auth/guards/jwt-auth/jwt-auth.guard';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -102,6 +105,12 @@ import { OutletReceiptCounter } from './models/outlet_receipt_counters.model';
     OutletReceiptCountersModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+    AppService
+  ],
 })
 export class AppModule { }

@@ -7,8 +7,8 @@ import {
 } from 'class-validator';
 
 export class CreateMenuCategoriesDto {
-    @IsInt()
-    company_id: number;
+    // @IsInt()
+    // company_id: number;
 
     @IsOptional()
     @IsString()

@@ -5,12 +5,14 @@ import { UpdateAuthDto } from './dto/update-auth.dto';
 import { RegisterDto } from './dto/register.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { LoginDto } from './dto/login.dto';
+import { Public } from '@/decorators/public.decorator';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) { }
 
   @Post('register')
+  @Public()
   @ApiOperation({ summary: 'Register a new user' })
   @ApiResponse({
     status: 201,
@@ -21,6 +23,7 @@ export class AuthController {
   }
 
   @Post('login')
+  @Public()
   @ApiOperation({ summary: 'Login a user' })
   @ApiResponse({
     status: 200,

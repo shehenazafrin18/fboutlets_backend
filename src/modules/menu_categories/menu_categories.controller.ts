@@ -24,6 +24,7 @@ export class MenuCategoriesController {
 
     @Patch(':id')
     update(@Param('id') id: string, @Body() updateMenuCategoriesDto: UpdateMenuCategoriesDto) {
+        console.log({ updateMenuCategoriesDto });
         return this.menuCategoriesService.update(+id, updateMenuCategoriesDto);
     }
 

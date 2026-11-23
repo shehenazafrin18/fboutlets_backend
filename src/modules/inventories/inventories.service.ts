@@ -7,6 +7,7 @@ import { UpdateInventoriesDto } from './dto/update-inventories.dto';
 import { InjectModel } from '@nestjs/sequelize';
 import { Op } from 'sequelize';
 import { Inventory } from '../../models/inventories.model';
+import { COMPANY_ID } from '@/common/constants';
 
 @Injectable()
 export class InventoriesService {
@@ -18,7 +19,7 @@ export class InventoriesService {
     public async create(createInventoriesDto: CreateInventoriesDto) {
         const existing = await this.inventoryModel.findOne({
             where: {
-                company_id: createInventoriesDto.company_id,
+                company_id: COMPANY_ID,
                 outlet_id: createInventoriesDto.outlet_id,
                 inventory_item_id: createInventoriesDto.inventory_item_id,
             },
@@ -62,12 +63,11 @@ export class InventoriesService {
         }
 
         if (
-            updateInventoriesDto.company_id ||
+            // updateInventoriesDto.company_id ||
             updateInventoriesDto.outlet_id ||
             updateInventoriesDto.inventory_item_id
         ) {
-            const companyId =
-                updateInventoriesDto.company_id ?? inventory.company_id;
+            const companyId = COMPANY_ID ?? inventory.company_id;
 
             const outletId =
                 updateInventoriesDto.outlet_id ?? inventory.outlet_id;
