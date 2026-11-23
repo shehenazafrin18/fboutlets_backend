@@ -12,6 +12,7 @@ import {
 } from 'sequelize-typescript';
 
 import { Company } from './company.model';
+import { toDefaultValue } from 'sequelize/lib/utils';
 
 @Table({
     tableName: 'inventory_items',
@@ -19,9 +20,6 @@ import { Company } from './company.model';
     indexes: [
         {
             unique: true,
-            fields: ['company_id', 'sku'],
-        },
-        {
             fields: ['company_id', 'name'],
         },
     ],
@@ -37,7 +35,7 @@ export class InventoryItem extends Model<InventoryItem> {
         type: DataType.INTEGER,
         allowNull: false,
     })
-    company_id: string;
+    company_id: number;
 
     @Column({
         type: DataType.STRING(150),
@@ -58,10 +56,17 @@ export class InventoryItem extends Model<InventoryItem> {
     description: string;
 
     @Column({
-        type: DataType.STRING(20),
-        allowNull: false,
+        type: DataType.STRING,
+        allowNull: true,
     })
     base_unit: string;
+
+    @Column({
+        type: DataType.DECIMAL(12, 3),
+        allowNull: false,
+        defaultValue: '0.000',
+    })
+    declare standard_cost: string;
 
     @Column({
         type: DataType.BOOLEAN,

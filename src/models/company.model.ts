@@ -50,7 +50,7 @@ export class Company extends Model<Company> {
 
     @Default(true)
     @Column(DataType.BOOLEAN)
-    declare status: boolean;
+    declare is_active: boolean;
 
     @CreatedAt
     declare created_at: Date;

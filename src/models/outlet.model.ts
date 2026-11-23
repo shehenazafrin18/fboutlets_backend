@@ -54,7 +54,7 @@ export class Outlet extends Model<Outlet> {
     @Default(true)
     @AllowNull(false)
     @Column(DataType.BOOLEAN)
-    declare status: boolean;
+    declare is_active: boolean;
 
     @BelongsTo(() => Company)
     declare company: Company;

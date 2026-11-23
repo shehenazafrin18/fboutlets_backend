@@ -13,13 +13,14 @@ export class MenuCategoriesService {
         private readonly menuCategoryModel: typeof MenuCategory,
     ) { }
     public async create(createMenuCategoriesDto: CreateMenuCategoriesDto) {
+        console.log({ createMenuCategoriesDto })
         const existing = await this.menuCategoryModel.findOne({
             where: {
                 company_id: COMPANY_ID,
                 name: createMenuCategoriesDto.name,
             },
         });
-
+        console.log({ existing })
         if (existing) {
             throw new ConflictException(
                 'Menu Category already exists for this company',
@@ -28,6 +29,7 @@ export class MenuCategoriesService {
 
         return this.menuCategoryModel.create({
             ...createMenuCategoriesDto,
+            company_id: COMPANY_ID,
         });
     }
 
@@ -49,7 +51,6 @@ export class MenuCategoriesService {
 
     public async update(id: number, updateMenuCategoriesDto: UpdateMenuCategoriesDto) {
         const menuCategory = await this.menuCategoryModel.findByPk(id);
-        console.log({ updateMenuCategoriesDto })
         if (!menuCategory) {
             throw new NotFoundException('Menu Category not found');
         }

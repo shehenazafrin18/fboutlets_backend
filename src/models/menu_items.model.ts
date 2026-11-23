@@ -69,7 +69,7 @@ export class MenuItem extends Model<MenuItem> {
     @Default(true)
     @AllowNull(false)
     @Column(DataType.BOOLEAN)
-    declare status: boolean;
+    declare is_active: boolean;
 
     @BelongsTo(() => Company)
     declare company: Company;
