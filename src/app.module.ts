@@ -41,6 +41,8 @@ import { OutletReceiptCounter } from './models/outlet_receipt_counters.model';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth/jwt-auth.guard';
 import { InventoryItemModule } from './modules/inventory_item/inventory_item.module';
+import { SuppliersModule } from './modules/suppliers/suppliers.module';
+import { PurchasesModule } from './modules/purchases/purchases.module';
 
 @Module({
   imports: [
@@ -104,7 +106,10 @@ import { InventoryItemModule } from './modules/inventory_item/inventory_item.mod
     SalesModule,
     SalesItemsModule,
     OutletReceiptCountersModule,
-    InventoryItemModule
+    InventoryItemModule,
+    OutletMenuModule,
+    SuppliersModule,
+    PurchasesModule
   ],
   controllers: [AppController],
   providers: [

@@ -8,6 +8,8 @@ import { InjectModel } from '@nestjs/sequelize';
 import { Op } from 'sequelize';
 import { Inventory } from '../../models/inventories.model';
 import { COMPANY_ID } from '@/common/constants';
+import { Outlet } from '@/models/outlet.model';
+import { InventoryItem } from '@/models/inventory_items.model';
 
 @Injectable()
 export class InventoriesService {
@@ -33,13 +35,29 @@ export class InventoriesService {
 
         return this.inventoryModel.create({
             ...createInventoriesDto,
+            company_id: COMPANY_ID,
         });
     }
 
     public async findAll() {
         return this.inventoryModel.findAll({
+            include: [
+                {
+                    model: Outlet,
+                    as: 'outlet',
+                    attributes: ['id', 'name'],
+                },
+                {
+                    model: InventoryItem,
+                    as: 'inventory_item',
+                    attributes: ['id', 'name', 'sku'],
+                },
+            ],
             order: [['createdAt', 'DESC']],
+            raw: true,
+            nest: true,
         });
+
     }
 
     public async findOne(id: number) {
@@ -92,7 +110,10 @@ export class InventoriesService {
             }
         }
 
-        await inventory.update(updateInventoriesDto);
+        await inventory.update({
+            ...updateInventoriesDto,
+            company_id: COMPANY_ID,
+        });
 
         return inventory;
     }

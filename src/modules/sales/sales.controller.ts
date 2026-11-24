@@ -1,9 +1,15 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { SalesService } from './sales.service';
+import { CreateSalesDto } from './dto/create-sales.dto';
 
 @Controller('sales')
 export class SalesController {
     constructor(private readonly salesService: SalesService) { }
+
+    @Post()
+    create(@Body() createSalesDto: CreateSalesDto) {
+        return this.salesService.create(createSalesDto);
+    }
 
     @Get('outlet/:outletId')
     findByOutletId(@Param('outletId') outletId: string) {

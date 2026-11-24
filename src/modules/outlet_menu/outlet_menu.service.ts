@@ -1,31 +1,3 @@
-// import { Injectable } from '@nestjs/common';
-// import { CreateOutletMenuDto } from './dto/create-outlet_menu.dto';
-// import { UpdateOutletMenuDto } from './dto/update-outlet_menu.dto';
-
-
-// @Injectable()
-// export class OutletMenuService {
-//     public async create(createOutletMenuDto: CreateOutletMenuDto) {
-//         return 'This action adds a new Outlet Menu';
-//     }
-
-//     public async findAll() {
-//         return `This action returns all Outlet Menus`;
-//     }
-
-//     public async findOne(id: number) {
-//         return `This action returns a #${id} Outlet Menu`;
-//     }
-
-//     public async update(id: number, updateOutletMenuDto: UpdateOutletMenuDto) {
-//         return `This action updates a #${id} Outlet Menu`;
-//     }
-
-//     public async remove(id: number) {
-//         return `This action removes a #${id} Outlet Menu`;
-//     }
-// }
-
 import {
     Injectable,
     NotFoundException,

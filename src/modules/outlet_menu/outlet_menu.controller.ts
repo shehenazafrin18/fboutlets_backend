@@ -10,7 +10,7 @@ import {
 import { OutletMenuService } from './outlet_menu.service';
 import { UpdateOutletMenuPriceDto } from './dto/update-outlet_menu_price.dto';
 
-@Controller()
+@Controller('outlet-menu')
 export class OutletMenuController {
     constructor(
         private readonly outletMenuService: OutletMenuService,

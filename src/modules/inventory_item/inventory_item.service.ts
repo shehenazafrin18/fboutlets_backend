@@ -39,6 +39,7 @@ export class InventoryItemService {
 
     public async findAll() {
         return this.inventoryItemModel.findAll({
+            where: { is_active: true },
             order: [['createdAt', 'DESC']],
         });
     }
