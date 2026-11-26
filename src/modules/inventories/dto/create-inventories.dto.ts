@@ -14,6 +14,9 @@ export class CreateInventoriesDto {
     outlet_id: number;
 
     @IsInt()
+    menu_item_id: number;
+
+    @IsInt()
     inventory_item_id: number;
 
     @IsNumber({ maxDecimalPlaces: 2 })

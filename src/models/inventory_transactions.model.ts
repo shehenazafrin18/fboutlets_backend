@@ -18,6 +18,7 @@ import { InventoryItem } from './inventory_items.model';
 export enum InventoryTransactionType {
     IN = 'IN',
     OUT = 'OUT',
+    SALE = 'SALE',
     ADJUSTMENT = 'ADJUSTMENT',
 }
 
@@ -48,21 +49,21 @@ export class InventoryTransaction extends Model<InventoryTransaction> {
         type: DataType.INTEGER,
         allowNull: false,
     })
-    company_id: string;
+    company_id: number;
 
     @ForeignKey(() => Outlet)
     @Column({
         type: DataType.INTEGER,
         allowNull: false,
     })
-    outlet_id: string;
+    outlet_id: number;
 
     @ForeignKey(() => InventoryItem)
     @Column({
         type: DataType.INTEGER,
         allowNull: false,
     })
-    inventory_item_id: string;
+    inventory_item_id: number;
 
     @Column({
         type: DataType.ENUM('IN', 'OUT', 'ADJUSTMENT'),
@@ -78,21 +79,21 @@ export class InventoryTransaction extends Model<InventoryTransaction> {
 
     @Column({
         type: DataType.DECIMAL(12, 3),
-        allowNull: false,
+        allowNull: true,
     })
     previous_quantity: number;
 
     @Column({
         type: DataType.DECIMAL(12, 3),
-        allowNull: false,
+        allowNull: true,
     })
     new_quantity: number;
 
     @Column({
-        type: DataType.STRING(100),
+        type: DataType.INTEGER,
         allowNull: true,
     })
-    reference_no: string;
+    reference_id: number;
 
     @Column({
         type: DataType.TEXT,
@@ -104,7 +105,7 @@ export class InventoryTransaction extends Model<InventoryTransaction> {
         type: DataType.INTEGER,
         allowNull: false,
     })
-    created_by: string;
+    created_by: number;
 
     @BelongsTo(() => Company)
     company: Company;

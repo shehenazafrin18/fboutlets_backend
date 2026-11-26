@@ -137,7 +137,7 @@ export class Sale extends Model<Sale> {
         type: DataType.INTEGER,
         allowNull: false,
     })
-    created_by: string;
+    created_by: number;
 
     @BelongsTo(() => Company)
     company: Company;

@@ -15,6 +15,7 @@ import { Company } from './company.model';
 import { Outlet } from './outlet.model';
 import { InventoryItem } from './inventory_items.model';
 import { OutletMenu } from './outlet_menu.model';
+import { MenuItem } from './menu_items.model';
 
 @Table({
     tableName: 'inventories',
@@ -48,6 +49,13 @@ export class Inventory extends Model<Inventory> {
         allowNull: false,
     })
     outlet_id: number;
+
+    @ForeignKey(() => MenuItem)
+    @Column({
+        type: DataType.INTEGER,
+        allowNull: false,
+    })
+    menu_item_id: number;
 
     @ForeignKey(() => InventoryItem)
     @Column({
@@ -94,6 +102,9 @@ export class Inventory extends Model<Inventory> {
 
     @BelongsTo(() => Outlet)
     outlet: Outlet;
+
+    @BelongsTo(() => MenuItem)
+    menu_item: MenuItem;
 
     @BelongsTo(() => InventoryItem)
     inventory_item: InventoryItem;

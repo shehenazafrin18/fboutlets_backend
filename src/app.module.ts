@@ -67,9 +67,9 @@ import { MenuRecipe } from './models/menu_recipe.model';
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      autoLoadModels: true,
-      synchronize: true,
-      sync: { alter: true },
+      autoLoadModels: false,
+      synchronize: false,
+      sync: { alter: false },
       models: [
         User,
         Division,

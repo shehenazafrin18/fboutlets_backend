@@ -103,7 +103,7 @@ export class InventoriesService {
                     as: 'outlet_menus',
                     attributes: [
                         'selling_price',
-                        'menu_item_id',
+                        'menu_item_id', 'is_available'
                     ],
                     required: false,
                     include: [
