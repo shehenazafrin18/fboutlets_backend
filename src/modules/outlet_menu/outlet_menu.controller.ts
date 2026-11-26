@@ -17,7 +17,7 @@ export class OutletMenuController {
     ) { }
 
     // GET /outlets/:outletId/menu
-    @Get('outlets/:outletId/menu')
+    @Get('outlets/menu/:outletId')
     findOutletMenu(
         @Param('outletId') outletId: string,
     ) {
@@ -25,7 +25,7 @@ export class OutletMenuController {
     }
 
     // POST /outlets/:outletId/menu-items/:itemId/assign
-    @Post('outlets/:outletId/menu-items/:itemId/assign')
+    @Post('/outlets/:outletId/menu-items/:itemId/assign')
     assignMenuItem(
         @Param('outletId') outletId: string,
         @Param('itemId') itemId: string,
@@ -37,7 +37,7 @@ export class OutletMenuController {
     }
 
     // PATCH /outlets/:outletId/menu-items/:itemId/price
-    @Patch('outlets/:outletId/menu-items/:itemId/price')
+    @Patch('outlets/:outletId/menu-items/price/:itemId')
     updateMenuItemPrice(
         @Param('outletId') outletId: string,
         @Param('itemId') itemId: string,

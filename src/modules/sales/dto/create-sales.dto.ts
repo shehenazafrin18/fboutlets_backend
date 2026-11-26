@@ -31,6 +31,7 @@ import {
     IsUUID,
     Min,
     ValidateNested,
+    IsDateString
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
@@ -44,11 +45,15 @@ export class CreateSaleItemDto {
 }
 
 export class CreateSalesDto {
-    @IsUUID()
-    outlet_id: string;
+    @IsNumber()
+    outlet_id: number;
 
     @IsEnum(['CASH', 'CARD', 'MOBILE_BANKING'])
     payment_method: string;
+
+    @IsOptional()
+    @IsDateString()
+    sale_date?: string;
 
     @IsOptional()
     @IsNumber()

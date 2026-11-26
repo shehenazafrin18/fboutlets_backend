@@ -60,5 +60,5 @@ export class Supplier extends Model<Supplier> {
     declare createdAt: Date;
 
     @UpdatedAt
-    declare updatedAt: Date;
+    declare updatedAt?: Date;
 }

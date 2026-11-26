@@ -42,8 +42,12 @@ export class OutletMenuService {
                     model: MenuItem,
                     required: true,
                 },
+                {
+                    model: Outlet,
+                    required: true
+                }
             ],
-            order: [['createdAt', 'DESC']],
+            order: [['created_at', 'DESC']],
         });
     }
 

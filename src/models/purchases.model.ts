@@ -80,5 +80,5 @@ export class Purchase extends Model<Purchase> {
     declare createdAt: Date;
 
     @UpdatedAt
-    declare updatedAt: Date;
+    declare updatedAt?: Date;
 }

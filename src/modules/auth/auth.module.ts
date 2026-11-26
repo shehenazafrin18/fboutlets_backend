@@ -12,11 +12,13 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { ConfigService } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
+import { UserOutlet } from '@/models/user_outlet.model';
+import { Outlet } from '@/models/outlet.model';
 
 @Module({
   imports: [
     SequelizeModule.forFeature(
-      [User, UserRole, Role, Menu, RoleMenuPermission]
+      [User, UserRole, Role, Menu, RoleMenuPermission, UserOutlet, Outlet]
     ),
     PassportModule,
     JwtModule.registerAsync({

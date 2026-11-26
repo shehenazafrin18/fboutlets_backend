@@ -8,11 +8,13 @@ import {
     Index,
     AutoIncrement,
     PrimaryKey,
+    HasMany,
 } from 'sequelize-typescript';
 
 import { Company } from './company.model';
 import { Outlet } from './outlet.model';
 import { InventoryItem } from './inventory_items.model';
+import { OutletMenu } from './outlet_menu.model';
 
 @Table({
     tableName: 'inventories',
@@ -95,4 +97,11 @@ export class Inventory extends Model<Inventory> {
 
     @BelongsTo(() => InventoryItem)
     inventory_item: InventoryItem;
+
+    @HasMany(() => OutletMenu, {
+        foreignKey: 'outlet_id',
+        sourceKey: 'outlet_id',
+        as: 'outlet_menus',
+    })
+    outlet_menus: OutletMenu[];
 }

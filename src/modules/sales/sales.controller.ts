@@ -1,14 +1,16 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Req } from '@nestjs/common';
 import { SalesService } from './sales.service';
 import { CreateSalesDto } from './dto/create-sales.dto';
+import { Request } from 'express';
+
 
 @Controller('sales')
 export class SalesController {
     constructor(private readonly salesService: SalesService) { }
 
     @Post()
-    create(@Body() createSalesDto: CreateSalesDto) {
-        return this.salesService.create(createSalesDto);
+    create(@Body() createSalesDto: CreateSalesDto, @Req() req: Request,) {
+        return this.salesService.create(createSalesDto, req.user,);
     }
 
     @Get('outlet/:outletId')

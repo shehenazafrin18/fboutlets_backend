@@ -51,14 +51,14 @@ export class Sale extends Model<Sale> {
         type: DataType.INTEGER,
         allowNull: false,
     })
-    company_id: string;
+    company_id: number;
 
     @ForeignKey(() => Outlet)
     @Column({
         type: DataType.INTEGER,
         allowNull: false,
     })
-    outlet_id: string;
+    outlet_id: number;
 
     @Column({
         type: DataType.STRING(50),

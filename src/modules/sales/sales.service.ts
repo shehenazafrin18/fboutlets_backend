@@ -9,6 +9,9 @@ import { Sale } from '../../models/sales.model';
 import { OutletMenu } from '@/models/outlet_menu.model';
 import { CreateSalesDto } from './dto/create-sales.dto';
 import { Outlet } from '@/models/outlet.model';
+import { MenuItem } from '@/models/menu_items.model';
+import { COMPANY_ID } from '@/common/constants';
+
 
 @Injectable()
 export class SalesService {
@@ -26,84 +29,222 @@ export class SalesService {
         private readonly sequelize: Sequelize,
     ) { }
 
-    async create(createSalesDto: CreateSalesDto) {
+    // async create(createSalesDto: CreateSalesDto) {
+    //     const transaction = await this.sequelize.transaction();
+
+    //     try {
+    //         const {
+    //             outlet_id,
+    //             payment_method,
+    //             discount = 0,
+    //             items,
+    //         } = createSalesDto;
+
+    //         // Validate items
+    //         if (!items?.length) {
+    //             throw new BadRequestException(
+    //                 'At least one sale item is required',
+    //             );
+    //         }
+
+    //         // Find assigned menu items for this outlet
+    //         const menuItems = await this.outletMenuModel.findAll({
+    //             where: {
+    //                 outlet_id,
+    //                 menu_item_id: items.map(item => item.menu_item_id),
+    //                 is_available: true,
+    //             },
+    //             transaction,
+    //         });
+
+    //         if (menuItems.length !== new Set(
+    //             items.map(item => item.menu_item_id),
+    //         ).size) {
+    //             throw new BadRequestException(
+    //                 'Some menu items are not assigned to this outlet',
+    //             );
+    //         }
+
+    //         // Calculate subtotal using outlet prices
+    //         let subtotal = 0;
+
+    //         const saleItems = items.map(item => {
+    //             const outletMenu = menuItems.find(
+    //                 menu => menu.menu_item_id === item.menu_item_id,
+    //             );
+
+    //             const unitPrice = Number(outletMenu.selling_price);
+    //             const totalPrice = unitPrice * item.quantity;
+
+    //             subtotal += totalPrice;
+
+    //             return {
+    //                 menu_item_id: item.menu_item_id,
+    //                 quantity: item.quantity,
+    //                 unit_price: unitPrice,
+    //                 total_price: totalPrice,
+    //             };
+    //         });
+
+    //         if (discount > subtotal) {
+    //             throw new BadRequestException(
+    //                 'Discount cannot exceed subtotal',
+    //             );
+    //         }
+
+    //         const totalAmount = subtotal - discount;
+
+    //         // Create sale
+    //         const sale = await this.saleModel.create(
+    //             {
+    //                 outlet_id,
+    //                 subtotal,
+    //                 discount_amount: discount,
+    //                 total_amount: totalAmount,
+    //                 payment_method,
+    //             },
+    //             { transaction },
+    //         );
+
+    //         // Create sale items
+    //         await this.saleItemModel.bulkCreate(
+    //             saleItems.map(item => ({
+    //                 ...item,
+    //                 sale_id: sale.id,
+    //             })),
+    //             { transaction },
+    //         );
+
+    //         await transaction.commit();
+
+    //         return this.saleModel.findByPk(sale.id, {
+    //             include: [
+    //                 {
+    //                     model: SaleItem,
+    //                     as: 'sale_items',
+    //                 },
+    //             ],
+    //         });
+
+    //     } catch (error) {
+    //         await transaction.rollback();
+    //         throw error;
+    //     }
+    // }
+    async create(createSalesDto: CreateSalesDto, user: any) {
         const transaction = await this.sequelize.transaction();
 
         try {
             const {
                 outlet_id,
+                sale_date,
                 payment_method,
                 discount = 0,
                 items,
             } = createSalesDto;
 
-            // Validate items
             if (!items?.length) {
                 throw new BadRequestException(
                     'At least one sale item is required',
                 );
             }
 
-            // Find assigned menu items for this outlet
+            const menuIds = items.map(item => item.menu_item_id);
+
+            if (new Set(menuIds).size !== menuIds.length) {
+                throw new BadRequestException(
+                    'Duplicate menu items are not allowed',
+                );
+            }
+
             const menuItems = await this.outletMenuModel.findAll({
                 where: {
                     outlet_id,
-                    menu_item_id: items.map(item => item.menu_item_id),
+                    menu_item_id: menuIds,
                     is_available: true,
                 },
+                include: [
+                    {
+                        model: MenuItem,
+                        as: 'menu_item',
+                    },
+                ],
                 transaction,
             });
 
-            if (menuItems.length !== new Set(
-                items.map(item => item.menu_item_id),
-            ).size) {
+            if (menuItems.length !== menuIds.length) {
                 throw new BadRequestException(
                     'Some menu items are not assigned to this outlet',
                 );
             }
 
-            // Calculate subtotal using outlet prices
             let subtotal = 0;
 
             const saleItems = items.map(item => {
                 const outletMenu = menuItems.find(
-                    menu => menu.menu_item_id === item.menu_item_id,
+                    menu =>
+                        Number(menu.menu_item_id) ===
+                        Number(item.menu_item_id),
                 );
 
                 const unitPrice = Number(outletMenu.selling_price);
-                const totalPrice = unitPrice * item.quantity;
+                const quantity = Number(item.quantity);
 
-                subtotal += totalPrice;
+                if (!Number.isFinite(quantity) || quantity <= 0) {
+                    throw new BadRequestException(
+                        'Invalid item quantity',
+                    );
+                }
+
+                const totalAmount = unitPrice * quantity;
+
+                subtotal += totalAmount;
 
                 return {
                     menu_item_id: item.menu_item_id,
-                    quantity: item.quantity,
+                    item_name: outletMenu.menu_item.name,
+                    quantity,
                     unit_price: unitPrice,
-                    total_price: totalPrice,
+                    discount_amount: 0,
+                    tax_amount: 0,
+                    total_amount: totalAmount,
                 };
             });
 
-            if (discount > subtotal) {
+            if (Number(discount) < 0 || Number(discount) > subtotal) {
                 throw new BadRequestException(
-                    'Discount cannot exceed subtotal',
+                    'Invalid discount amount',
                 );
             }
 
-            const totalAmount = subtotal - discount;
+            const totalAmount = subtotal - Number(discount);
 
-            // Create sale
-            const sale = await this.saleModel.create(
-                {
-                    outlet_id,
-                    subtotal,
-                    discount_amount: discount,
-                    total_amount: totalAmount,
-                    payment_method,
-                },
-                { transaction },
-            );
+            const saleData = {
+                // id: 1,
+                company_id: COMPANY_ID,
+                outlet_id: Number(outlet_id),
+                invoice_no: await this.generateInvoiceNo(outlet_id),
+                sale_date: new Date(sale_date) || new Date(),
+                subtotal: Number(subtotal.toFixed(2)),
+                discount_amount: Number(discount.toFixed(2)),
+                tax_amount: 0,
+                total_amount: Number(totalAmount.toFixed(2)),
+                payment_method,
+                created_by: user.id,
+            };
+            // console.log({ totalAmount });
+            // console.log({ user });
+            // console.log({ saleItems });
+            // // return
 
-            // Create sale items
+            // console.log({ saleData })
+            // return
+
+            //Insert sale data
+            const sale = await this.saleModel.create(saleData, {
+                transaction,
+            });
+
             await this.saleItemModel.bulkCreate(
                 saleItems.map(item => ({
                     ...item,
@@ -276,6 +417,20 @@ export class SalesService {
         });
     }
 
+    private async generateInvoiceNo(outlet_id: number): Promise<string> {
+        const date = new Date();
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+
+        const lastSale = await this.saleModel.findOne({
+            where: { outlet_id },
+            order: [['id', 'DESC']],
+        });
+
+        const nextNumber = lastSale ? lastSale.id + 1 : 1;
+
+        return `INV-${outlet_id}-${year}${month}-${String(nextNumber).padStart(5, '0')}`;
+    }
 }
 
 

@@ -9,10 +9,12 @@ import {
     Index,
     PrimaryKey,
     AutoIncrement,
+    HasMany,
 } from 'sequelize-typescript';
 
 import { Company } from './company.model';
 import { toDefaultValue } from 'sequelize/lib/utils';
+import { MenuRecipe } from './menu_recipe.model';
 
 @Table({
     tableName: 'inventory_items',
@@ -76,4 +78,7 @@ export class InventoryItem extends Model<InventoryItem> {
 
     @BelongsTo(() => Company)
     company: Company;
+
+    @HasMany(() => MenuRecipe)
+    menu_recipes: MenuRecipe[];
 }

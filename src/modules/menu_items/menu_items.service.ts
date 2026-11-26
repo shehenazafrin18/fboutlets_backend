@@ -37,7 +37,7 @@ export class MenuItemsService {
 
     public async findAll() {
         return this.menuItemModel.findAll({
-            order: [['createdAt', 'DESC']],
+            order: [['created_at', 'DESC']],
         });
     }
 

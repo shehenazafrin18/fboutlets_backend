@@ -11,10 +11,12 @@ import {
     CreatedAt,
     UpdatedAt,
     AutoIncrement,
+    HasMany,
 } from 'sequelize-typescript';
 
 import { Company } from './company.model';
 import { MenuCategory } from './menu_categories.model';
+import { MenuRecipe } from './menu_recipe.model';
 
 @Table({
     tableName: 'menu_items',
@@ -82,4 +84,7 @@ export class MenuItem extends Model<MenuItem> {
 
     @UpdatedAt
     declare updated_at?: Date;
+
+    @HasMany(() => MenuRecipe)
+    menu_recipes: MenuRecipe[];
 }

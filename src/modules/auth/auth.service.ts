@@ -11,6 +11,8 @@ import { UserRole } from '../../models/master_data/user_role.model';
 import { Role } from '../../models/master_data/role.model';
 import { Menu } from '../../models/master_data/menu.model';
 import { RoleMenuPermission } from '../../models/master_data/role_menu_permission.model';
+import { UserOutlet } from '@/models/user_outlet.model';
+import { Outlet } from '@/models/outlet.model';
 
 @Injectable()
 export class AuthService {
@@ -21,6 +23,10 @@ export class AuthService {
     private m_user_role: typeof UserRole,
     @InjectModel(Role)
     private m_role: typeof Role,
+    @InjectModel(Outlet)
+    private m_outlet: typeof Outlet,
+    @InjectModel(UserOutlet)
+    private m_user_outlet: typeof UserOutlet,
     @InjectModel(Menu)
     private m_menu: typeof Menu,
     @InjectModel(RoleMenuPermission)
@@ -66,6 +72,18 @@ export class AuthService {
       const roleMenuPermissions = await this.m_role_menu_permission.findAll({ where: { role_id: role_ids } });
       const menu_ids = roleMenuPermissions.map((roleMenuPermission) => roleMenuPermission.menu_id);
       const menuAccess = await this.m_menu.findAll({ where: { id: menu_ids } });
+      const userOutlets = await this.m_user_outlet.findAll({
+        where: {
+          user_id: user.id,
+          is_active: true,
+        },
+      });
+
+      const outlet_ids = userOutlets.map(
+        (item) => item.outlet_id
+      );
+      const outlets = await this.m_outlet.findAll({ where: { id: outlet_ids } });
+
       // console.log({ roles, menuAccess });
 
       // JWT payload
@@ -73,11 +91,13 @@ export class AuthService {
         sub: user.id,
         email: user.email,
         roles: role_ids,
+        outlets: outlet_ids
       };
 
       return {
         ...userData,
         roles,
+        outlets,
         menuAccess,
         access_token: this.jwtService.sign(payload),
       };

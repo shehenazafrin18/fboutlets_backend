@@ -52,15 +52,15 @@ export class OutletMenu extends Model<OutletMenu> {
     @Column(DataType.BOOLEAN)
     declare is_available: boolean;
 
-    @BelongsTo(() => Outlet)
-    declare outlet: Outlet;
-
-    @BelongsTo(() => MenuItem)
-    declare menu_item: MenuItem;
-
     @CreatedAt
     declare created_at: Date;
 
     @UpdatedAt
     declare updated_at?: Date;
+
+    @BelongsTo(() => Outlet)
+    declare outlet: Outlet;
+
+    @BelongsTo(() => MenuItem)
+    declare menu_item: MenuItem;
 }

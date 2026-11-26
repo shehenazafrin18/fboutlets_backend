@@ -11,9 +11,11 @@ import {
     CreatedAt,
     UpdatedAt,
     AutoIncrement,
+    HasMany,
 } from 'sequelize-typescript';
 
 import { Company } from './company.model';
+import { OutletMenu } from './outlet_menu.model';
 
 @Table({
     tableName: 'outlets',
@@ -64,4 +66,10 @@ export class Outlet extends Model<Outlet> {
 
     @UpdatedAt
     declare updated_at?: Date;
+
+    @HasMany(() => OutletMenu, {
+        foreignKey: 'outlet_id',
+        as: 'outlet_menus'
+    })
+    declare outlet_menus: OutletMenu[];
 }

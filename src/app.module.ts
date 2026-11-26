@@ -43,6 +43,10 @@ import { JwtAuthGuard } from './modules/auth/guards/jwt-auth/jwt-auth.guard';
 import { InventoryItemModule } from './modules/inventory_item/inventory_item.module';
 import { SuppliersModule } from './modules/suppliers/suppliers.module';
 import { PurchasesModule } from './modules/purchases/purchases.module';
+import { UserOutletsModule } from './modules/user-outlets/user-outlets.module';
+import { UserOutlet } from './models/user_outlet.model';
+import { MenuItemsModule } from './modules/menu_items/menu_items.module';
+import { MenuRecipe } from './models/menu_recipe.model';
 
 @Module({
   imports: [
@@ -86,12 +90,14 @@ import { PurchasesModule } from './modules/purchases/purchases.module';
         Inventory,
         Sale,
         SaleItem,
-        OutletReceiptCounter
+        OutletReceiptCounter,
+        UserOutlet, MenuRecipe
       ],
       // logging: console.log
     }),
     AuthModule,
     UserModule,
+    UserOutlet,
     UserRoleModule,
     RolesModule,
     MenuModule,
@@ -109,7 +115,9 @@ import { PurchasesModule } from './modules/purchases/purchases.module';
     InventoryItemModule,
     OutletMenuModule,
     SuppliersModule,
-    PurchasesModule
+    PurchasesModule,
+    UserOutletsModule,
+    MenuItemsModule
   ],
   controllers: [AppController],
   providers: [

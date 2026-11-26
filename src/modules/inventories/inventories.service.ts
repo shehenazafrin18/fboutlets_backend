@@ -10,6 +10,9 @@ import { Inventory } from '../../models/inventories.model';
 import { COMPANY_ID } from '@/common/constants';
 import { Outlet } from '@/models/outlet.model';
 import { InventoryItem } from '@/models/inventory_items.model';
+import { OutletMenu } from '@/models/outlet_menu.model';
+import { MenuRecipe } from '@/models/menu_recipe.model';
+import { MenuItem } from '@/models/menu_items.model';
 
 @Injectable()
 export class InventoriesService {
@@ -40,23 +43,84 @@ export class InventoriesService {
     }
 
     public async findAll() {
-        return this.inventoryModel.findAll({
+        // const result = await this.inventoryModel.findAll({
+        //     include: [
+        //         {
+        //             model: Outlet,
+        //             as: 'outlet',
+        //             attributes: ['id', 'name'],
+        //         },
+        //         {
+        //             model: InventoryItem,
+        //             as: 'inventory_item',
+        //             attributes: ['id', 'name', 'sku'],
+        //             include: [
+        //                 {
+        //                     model: MenuRecipe,
+        //                     as: 'menu_recipes',
+        //                     attributes: [
+        //                         'id',
+        //                         'menu_item_id',
+        //                         'inventory_item_id',
+        //                         'quantity'
+        //                     ],
+        //                     required: false,
+        //                     include: [
+        //                         {
+        //                             model: MenuItem,
+        //                             as: 'menu_item',
+        //                             attributes: ['id', 'name', 'category_id']
+        //                         }
+        //                     ],
+        //                 }
+        //             ],
+        //         },
+        //     ],
+        //     order: [['createdAt', 'DESC']],
+        // });
+        const result = this.inventoryModel.findAll({
+            attributes: [
+                'id',
+                'outlet_id',
+                'inventory_item_id',
+                'quantity',
+            ],
             include: [
                 {
                     model: Outlet,
                     as: 'outlet',
                     attributes: ['id', 'name'],
+                    required: false,
                 },
                 {
                     model: InventoryItem,
                     as: 'inventory_item',
-                    attributes: ['id', 'name', 'sku'],
+                    attributes: ['id', 'name'],
+                    required: false,
+                },
+                {
+                    model: OutletMenu,
+                    as: 'outlet_menus',
+                    attributes: [
+                        'selling_price',
+                        'menu_item_id',
+                    ],
+                    required: false,
+                    include: [
+                        {
+                            model: MenuItem,
+                            as: 'menu_item',
+                            attributes: ['id', 'name'],
+                            required: false,
+                        }
+                    ],
                 },
             ],
             order: [['createdAt', 'DESC']],
-            raw: true,
-            nest: true,
         });
+        return result;
+        // return result.map(item => item.get({ plain: true }));
+
 
     }
 
