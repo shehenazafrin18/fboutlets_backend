@@ -18,6 +18,12 @@ export class Menu extends Model<Menu> {
   declare name: string;
 
   @Column({ type: DataType.STRING, allowNull: false })
+  declare url: string;
+
+  @Column({ type: DataType.STRING, allowNull: true })
+  declare icon: string;
+
+  @Column({ type: DataType.STRING, allowNull: true })
   declare remarks: string;
 
 

@@ -13,6 +13,8 @@ import { Menu } from '../../models/master_data/menu.model';
 import { RoleMenuPermission } from '../../models/master_data/role_menu_permission.model';
 import { UserOutlet } from '@/models/user_outlet.model';
 import { Outlet } from '@/models/outlet.model';
+import { Op } from 'sequelize';
+
 
 @Injectable()
 export class AuthService {
@@ -71,7 +73,7 @@ export class AuthService {
       const roles = await this.m_role.findAll({ where: { id: role_ids } });
       const roleMenuPermissions = await this.m_role_menu_permission.findAll({ where: { role_id: role_ids } });
       const menu_ids = roleMenuPermissions.map((roleMenuPermission) => roleMenuPermission.menu_id);
-      const menuAccess = await this.m_menu.findAll({ where: { id: menu_ids } });
+      const menuList = await this.m_menu.findAll({ where: { id: menu_ids } });
       const userOutlets = await this.m_user_outlet.findAll({
         where: {
           user_id: user.id,
@@ -84,7 +86,7 @@ export class AuthService {
       );
       const outlets = await this.m_outlet.findAll({ where: { id: outlet_ids } });
 
-      // console.log({ roles, menuAccess });
+      // console.log({ roles, menuList });
 
       // JWT payload
       const payload = {
@@ -98,7 +100,7 @@ export class AuthService {
         ...userData,
         roles,
         outlets,
-        menuAccess,
+        menuList,
         access_token: this.jwtService.sign(payload),
       };
 
@@ -108,5 +110,20 @@ export class AuthService {
     }
   }
 
+  public async getMenuAccessByRole(roles: string) {
+    const roleIds = roles
+      ? roles.split(',').map(Number).filter(Number.isFinite)
+      : [];
+    const roleMenuPermissions = await this.m_role_menu_permission.findAll({
+      where: {
+        role_id: {
+          [Op.in]: roleIds,
+        },
+      }
+    });
+    const menu_ids = roleMenuPermissions.map((roleMenuPermission) => roleMenuPermission.menu_id);
+    return await this.m_menu.findAll({ where: { id: menu_ids, is_active: true } });
+
+  }
 }
 
